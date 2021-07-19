@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './ticket.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,6 +28,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<List<String>> tamBoard = List<List<String>>.generate(
+      3, (i) => List<String>.generate(9, (i) => " "),
+      growable: false);
+  void gen() {
+    setState(() {
+      TambolaTicketGenerator t = new TambolaTicketGenerator();
+      tamBoard = t.Generate();
+    });
+  }
+
   @override
   bool _hasBeenPressed = false;
 
@@ -82,9 +93,60 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Row(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        children: myRowChildren,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: myRowChildren,
+            ),
+          ),
+          //SizedBox(height: 100.0,),
+          Container(
+            child: Column(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Table(
+                    border: TableBorder.all(
+                      color: Colors.black,
+                      style: BorderStyle.solid,
+                      width: 1,
+                    ),
+                    children: [
+                      for (int i = 0; i <= 2; i++)
+                        TableRow(
+                            decoration: BoxDecoration(
+                              color: Colors.lightBlueAccent,
+                            ),
+                            children: [
+                              for (int j = 0; j <= 8; j++)
+                                Column(children: [
+                                  Text(tamBoard[i][j],
+                                      style: TextStyle(fontSize: 20.0)),
+                                ]),
+                            ]),
+                    ],
+                  ),
+                ),
+                Container(
+                  child: OutlinedButton(
+                    child: Text(
+                      'New',
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                    onPressed: () {
+                      gen();
+                    },
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
 
       // This trailing comma makes auto-formatting nicer for build methods.
